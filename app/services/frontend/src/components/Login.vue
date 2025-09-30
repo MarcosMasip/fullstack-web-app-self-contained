@@ -60,6 +60,9 @@ const http = axios.create({
   timeout: 10000 // 10s
 })
 
+// Derive API base from the page hostname to handle localhost/127.0.0.1 seamlessly
+const API_BASE = `${window.location.protocol}//${window.location.hostname}:8000`
+
 export default {
   name: 'Login',
   data () {
@@ -78,7 +81,7 @@ export default {
   methods: {
     checkLogin () {
       const parameters = 'username=' + this.username + '&password=' + this.password
-      const path = 'http://localhost:8000/login'
+  const path = `${API_BASE}/login`
       const config = {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
       }
@@ -117,7 +120,7 @@ export default {
         username: this.addUserForm.username,
         password: this.addUserForm.password
       }
-      const path = 'http://localhost:8000/account'
+  const path = `${API_BASE}/account`
       http.post(path, parameters)
         .then(() => {
           alert('Account created')

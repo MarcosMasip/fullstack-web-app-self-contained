@@ -45,6 +45,10 @@ async def serve_index(request: Request):
     if src.utils.is_production(): return "production"
     return templates.TemplateResponse("index.html", {"request": request})
 
+@app.get("/healthz")
+async def healthz():
+    return {"status": "ok"}
+
 @app.get("/userlogin")
 async def serve_index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})

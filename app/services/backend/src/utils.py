@@ -18,9 +18,10 @@ class Settings(BaseSettings):
     access_token_expire_minutes: int = 30  # 30 minutes
     refresh_token_expire_minutes: int = 60 * 24 * 7  # 7 days
     algorithm: str = "HS256"
-    jwt_secret_key: str  # should be kept secret
-    jwt_refresh_secret_key: str  # should be kept secret
-    production: bool
+    # Provide safe dev defaults to avoid crashing when .env is missing
+    jwt_secret_key: str = "dev-secret-key-change-me"
+    jwt_refresh_secret_key: str = "dev-refresh-secret-key-change-me"
+    production: bool = True
 
     class Config:
         env_file = ".env"

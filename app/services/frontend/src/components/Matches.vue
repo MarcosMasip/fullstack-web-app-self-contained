@@ -99,6 +99,8 @@
 <script>
 import axios from 'axios'
 
+const API_BASE = `${window.location.protocol}//${window.location.hostname}:8000`
+
 export default {
   data () {
     return {
@@ -116,7 +118,7 @@ export default {
   },
   methods: {
     getAccount () {
-      const path = 'http://localhost:8000/account/' + this.username
+  const path = `${API_BASE}/account/` + this.username
       const config = {
         headers: { Authorization: 'Bearer ' + this.token }
       }
@@ -190,7 +192,7 @@ export default {
       }
     },
     addPurchase (parameters, index, match) {
-      const path = 'http://localhost:8000/order/' + this.username
+  const path = `${API_BASE}/order/` + this.username
       const config = {
         headers: { Authorization: 'Bearer ' + this.token }
       }
@@ -219,8 +221,8 @@ export default {
       this.matches_added = []
     },
     getMatches () {
-      const pathMatches = 'http://localhost:8000/matches/'
-      const pathCompetition = 'http://localhost:8000/competition/'
+  const pathMatches = `${API_BASE}/matches/`
+  const pathCompetition = `${API_BASE}/competition/`
 
       axios.get(pathMatches)
         .then((res) => {
