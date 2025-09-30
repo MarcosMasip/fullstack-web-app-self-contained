@@ -9,7 +9,7 @@
       <div class="row mt-5 pt-5">
         <div v-if="creatingAccount" class="card mx-auto col-5 p-4">
           <h3 class="mb-4">Create an account</h3>
-          <form>
+          <form @submit.prevent="onSubmit">
             <div class="form-label-group">
               <label for="inputEmail">Username</label>
               <input type="username" id="inputUsername" class="form-control" placeholder="Username" required autofocus
@@ -22,7 +22,7 @@
                 v-model="addUserForm.password">
             </div>
             <div class="text-center">
-              <button type="submit" class="btn btn-primary w-100 d-block mt-4" @click="onSubmit">Submit</button>
+              <button type="submit" class="btn btn-primary w-100 d-block mt-4">Submit</button>
               <button class="btn btn-outline-success w-100 d-block mt-3" @click="backToLogin">Back To Log In</button>
             </div>
           </form>
@@ -97,19 +97,43 @@ export default {
       this.addUserForm.password = null
     },
     onSubmit () {
+      // basic client-side validation to avoid 422 surprises
+      if (!this.addUserForm?.username) {
+        alert('Please enter a username')
+        return
+      }
+      if (!this.addUserForm?.password || this.addUserForm.password.length < 8) {
+        alert('Password must be at least 8 characters long')
+        return
+      }
+
       const parameters = {
         username: this.addUserForm.username,
         password: this.addUserForm.password
       }
       const path = 'http://localhost:8000/account'
       axios.post(path, parameters)
-        .then((res) => {
+        .then(() => {
           alert('Account created')
           this.backToLogin()
         })
         .catch((error) => {
-          // eslint-disable-next-line
-          alert('Username already exists')
+          // Try to surface the actual backend error
+          let msg = 'Failed to create account'
+          const resp = error && error.response
+          if (resp) {
+            if (resp.data?.detail) {
+              msg = typeof resp.data.detail === 'string' ? resp.data.detail : JSON.stringify(resp.data.detail)
+            } else if (Array.isArray(resp.data)) {
+              // FastAPI 422 validation errors come as a list
+              msg = resp.data.map(e => e?.msg || JSON.stringify(e)).join(', ')
+            } else if (typeof resp.data === 'string') {
+              msg = resp.data
+            }
+          } else if (error?.message) {
+            msg = error.message
+          }
+          alert(msg)
           console.error(error)
         })
     },
