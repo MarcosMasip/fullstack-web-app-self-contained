@@ -345,6 +345,7 @@ Expected outcome:
 - Docker Desktop not running: start Docker and rerun `docker compose up`.
 - “openssl: command not found” on Windows: use the PowerShell snippet provided, or set static dev secrets in `.env`.
 - Backend shows CORS errors in browser: ensure you’re serving the frontend on http://localhost:8080 (that origin is allowed), and the backend is reachable at http://localhost:8000.
+- Axios "Network Error" in Create Account/Login: make sure the backend is up (check `docker compose ps` and `docker compose logs backend`), and try both http://localhost:8080 and http://127.0.0.1:8080. Backend CORS now allows both origins.
 - Reset Docker DB to a clean state: `docker compose down -v` (from `app/`).
 - Node build/install issues on Windows: run PowerShell as Administrator, or use WSL2 with Ubuntu and follow Linux/macOS steps.
 

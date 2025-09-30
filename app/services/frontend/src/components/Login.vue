@@ -55,6 +55,11 @@
 <script>
 import axios from 'axios'
 
+// Create an axios instance with a reasonable timeout to better surface network errors
+const http = axios.create({
+  timeout: 10000 // 10s
+})
+
 export default {
   name: 'Login',
   data () {
@@ -77,7 +82,7 @@ export default {
       const config = {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
       }
-      axios.post(path, parameters, config)
+      http.post(path, parameters, config)
         .then((res) => {
           this.logged = true
           this.token = res.data.access_token
@@ -87,7 +92,8 @@ export default {
           // eslint-disable-next-line
           alert('Username: ' + parameters.username + ' Password: ' + parameters.password)
           console.error(error)
-          alert('Username or Password incorrect')
+          const isNetwork = !error.response
+          alert(isNetwork ? 'Network error. Is the backend up on http://localhost:8000?' : 'Username or Password incorrect')
           // this.backToLogin()
         })
     },
@@ -112,7 +118,7 @@ export default {
         password: this.addUserForm.password
       }
       const path = 'http://localhost:8000/account'
-      axios.post(path, parameters)
+      http.post(path, parameters)
         .then(() => {
           alert('Account created')
           this.backToLogin()
@@ -131,7 +137,7 @@ export default {
               msg = resp.data
             }
           } else if (error?.message) {
-            msg = error.message
+            msg = 'Network error. Is the backend up on http://localhost:8000?\n' + error.message
           }
           alert(msg)
           console.error(error)
