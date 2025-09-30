@@ -3,6 +3,7 @@ uvicorn
 httpx
 requests
 pydantic
+pydantic-settings
 pytest
 psycopg2-binary
 python-dotenv

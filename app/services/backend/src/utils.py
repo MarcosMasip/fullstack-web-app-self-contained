@@ -1,5 +1,5 @@
 from passlib.context import CryptContext
-from pydantic import BaseSettings
+from pydantic_settings import BaseSettings
 from datetime import datetime, timedelta
 from typing import Union, Any
 from jose import jwt
