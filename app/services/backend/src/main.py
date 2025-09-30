@@ -23,9 +23,13 @@ models.Base.metadata.create_all(bind=engine) # Creem la base de dades amb els mo
 app = FastAPI()
 
 # Permetre acces a solicituds de tots els orígens
+# Allow common local dev origins (hostnames can differ per OS/browser)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:8080"],
+    allow_origins=[
+        "http://localhost:8080",
+        "http://127.0.0.1:8080",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
