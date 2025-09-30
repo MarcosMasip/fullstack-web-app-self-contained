@@ -12,6 +12,10 @@ Quick links:
 - App (frontend): http://localhost:8080
 - API (backend): http://localhost:8000
 
+Seeded demo account (auto-created on backend startup):
+- Username: demo
+- Password: DemoPass123
+
 ## What you can do
 
 - Sign up, log in, and log out
@@ -348,6 +352,7 @@ Expected outcome:
 - Axios "Network Error" in Create Account/Login: make sure the backend is up (check `docker compose ps` and `docker compose logs backend`), and try both http://localhost:8080 and http://127.0.0.1:8080. Backend CORS now allows both origins.
 - Reset Docker DB to a clean state: `docker compose down -v` (from `app/`).
 - Node build/install issues on Windows: run PowerShell as Administrator, or use WSL2 with Ubuntu and follow Linux/macOS steps.
+- If you can’t log in immediately, try the demo account above. If it’s missing, restart the backend to trigger auto-seeding.
 
 ---
 

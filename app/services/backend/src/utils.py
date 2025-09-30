@@ -4,7 +4,8 @@ from datetime import datetime, timedelta
 from typing import Union, Any
 from jose import jwt
 
-password_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# Use pbkdf2_sha256 to avoid OS/binary backend issues and 72-byte limits of bcrypt
+password_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
 
 
 def get_hashed_password(password: str) -> str:

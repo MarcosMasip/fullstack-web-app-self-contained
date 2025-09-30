@@ -21,6 +21,21 @@ from typing_extensions import Annotated
 models.Base.metadata.create_all(bind=engine) # Creem la base de dades amb els models que hem definit a SQLAlchemy
 
 app = FastAPI()
+# Seed a demo account on startup if it doesn't exist
+@app.on_event("startup")
+def seed_demo_account():
+    try:
+        db = next(get_db())
+        demo = repository.get_account_by_username(db, username="demo")
+        if not demo:
+            from src.utils import get_hashed_password
+            demo_pw = get_hashed_password("DemoPass123")
+            account = schemas.AccountCreate(username="demo", password=demo_pw)  # password already hashed by API in create_user; here we pre-hash to match expected storage
+            # Call repository directly because create_user would hash again
+            repository.create_account(db=db, account=account)
+    except Exception as e:
+        # Don't crash app on seed failure; just log
+        print(f"[seed] skipped: {e}")
 
 # Permetre acces a solicituds de tots els orígens
 # Allow common local dev origins (hostnames can differ per OS/browser)
